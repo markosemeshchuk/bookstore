@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="200" height="280" viewBox="0 0 200 280">
+  <rect width="200" height="280" fill="#3d3d4d"/>
+  <rect x="12" y="12" width="176" height="256" fill="none" stroke="#ffffff" stroke-width="2" opacity="0.6"/>
+  <text x="100" y="150" font-family="Georgia, serif" font-size="18" fill="#ffffff" text-anchor="middle">Місто</text>
+</svg>
