@@ -3,9 +3,18 @@ package com.ua.bookstore.web;
 import com.ua.bookstore.service.BookService;
 import com.ua.bookstore.web.dto.BookCardDto;
 import com.ua.bookstore.web.dto.BookDetailDto;
+import com.ua.bookstore.web.dto.BookRequest;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -13,8 +22,11 @@ import java.util.List;
 /**
  * REST API книг.
  *
- *   GET /api/books       → список карток
- *   GET /api/books/{id}  → одна книга з деталями
+ *   GET    /api/books?genre=...  → список карток (фільтр за жанром необов'язковий)
+ *   GET    /api/books/{id}       → одна книга з деталями
+ *   POST   /api/books            → створити (201)
+ *   PUT    /api/books/{id}       → оновити (200 / 404)
+ *   DELETE /api/books/{id}       → видалити (204 / 404)
  */
 @RestController
 @RequestMapping("/api/books")
@@ -27,12 +39,29 @@ public class BookController {
     }
 
     @GetMapping
-    public List<BookCardDto> list() {
-        return bookService.findAll();
+    public List<BookCardDto> list(@RequestParam(required = false) String genre) {
+        return bookService.findAll(genre);
     }
 
     @GetMapping("/{id}")
     public BookDetailDto getOne(@PathVariable Long id) {
         return bookService.findById(id);
+    }
+
+    @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
+    public BookDetailDto create(@RequestBody BookRequest request) {
+        return bookService.create(request);
+    }
+
+    @PutMapping("/{id}")
+    public BookDetailDto update(@PathVariable Long id, @RequestBody BookRequest request) {
+        return bookService.update(id, request);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> delete(@PathVariable Long id) {
+        bookService.delete(id);
+        return ResponseEntity.noContent().build();
     }
 }
