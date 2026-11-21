@@ -14,5 +14,9 @@ public interface BookRepository {
 
     Optional<Book> findById(Long id);
 
+    List<Book> findByGenre(String genre);
+
     Book save(Book book);
+
+    boolean deleteById(Long id);
 }

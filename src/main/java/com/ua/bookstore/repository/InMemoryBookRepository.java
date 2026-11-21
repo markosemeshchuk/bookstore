@@ -30,11 +30,23 @@ public class InMemoryBookRepository implements BookRepository {
     }
 
     @Override
+    public List<Book> findByGenre(String genre) {
+        return storage.values().stream()
+                .filter(b -> genre.equalsIgnoreCase(b.getGenre()))
+                .toList();
+    }
+
+    @Override
     public Book save(Book book) {
         if (book.getId() == null) {
             book.setId(sequence.incrementAndGet());
         }
         storage.put(book.getId(), book);
         return book;
+    }
+
+    @Override
+    public boolean deleteById(Long id) {
+        return storage.remove(id) != null;
     }
 }
